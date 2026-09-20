@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的收藏 · 种草</title>
+  <link rel="stylesheet" href="global.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="top-header">
+      <h2>⭐ 我的种草</h2>
+    </header>
+    <main class="page-content" id="main-content">
+      <div id="fav-list">加载中...</div>
+    </main>
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-item">今日</a>
+      <a href="itinerary.html" class="nav-item">行程</a>
+      <a href="favorites.html" class="nav-item active">种草</a>
+      <a href="language.html" class="nav-item">语言</a>
+      <a href="guide.html" class="nav-item">锦囊</a>
+    </nav>
+  </div>
+  <script type="module">
+    import { loadAllData, toggleFavorite } from './js/supabase-client.js';
+    const allData = await loadAllData();
+    const container = document.getElementById('fav-list');
+    if (!allData) {
+      container.innerHTML = '<p>数据加载失败</p>';
+    } else {
+      container.innerHTML = allData.favorites.length === 0
+        ? '<p style="text-align:center;color:#888;margin-top:40px;">暂无收藏，去行程页添加吧 ✨</p>'
+        : allData.favorites.map(item => `
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                  <span style="font-size:12px;color:#888;">${item.category || ''}</span>
+                  <h4 style="margin:4px 0;">${item.name}</h4>
+                  <p style="font-size:14px;color:#666;">${item.notes || ''}</p>
+                </div>
+                <button onclick="toggleFav(${item.id}, ${item.is_starred})" style="border:none;background:transparent;font-size:24px;cursor:pointer;">
+                  ${item.is_starred ? '⭐' : '☆'}
+                </button>
+              </div>
+            </div>
+          `).join('');
+    }
+    window.toggleFav = async function(id, curr) {
+      await toggleFavorite(id, curr);
+      location.reload();
+    };
+  </script>
+</body>
+</html>
