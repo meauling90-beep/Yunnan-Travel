@@ -1,0 +1,37 @@
+:root{
+  --indigo:#4B53BC;
+  --coral:#FF7A59;
+  --cream:#F9F5ED;
+  --slate:#2A2A2A;
+  --mint:#D6E8E0;
+  --radius:16px;
+  --shadow:0 4px 20px rgba(0,0,0,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,"PingFang SC",sans-serif;}
+body{background:var(--cream);color:var(--slate);min-height:100vh;}
+
+.splash-screen{position:fixed;inset:0;background:linear-gradient(135deg,#4B53BC,#6B72D9);color:white;display:flex;align-items:center;justify-content:center;z-index:999;}
+.splash-content{text-align:center;padding:32px;}
+.splash-title{font-size:42px;font-weight:800;margin-bottom:8px;}
+.splash-subtitle{opacity:.8;margin-bottom:40px;}
+.countdown{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:40px;}
+.num{font-size:48px;font-weight:800;}
+.unit{font-size:18px;opacity:.8;}
+.enter-btn{background:white;color:var(--indigo);border:none;padding:14px 40px;border-radius:50px;font-size:18px;font-weight:600;cursor:pointer;}
+
+.app-container{padding-bottom:80px;}
+.top-header{background:white;padding:16px 20px;box-shadow:var(--shadow);position:sticky;top:0;z-index:10;}
+.top-header h2{font-size:20px;font-weight:700;}
+.page-content{padding:20px;}
+.card{background:white;border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow);}
+.card h3{font-size:18px;margin-bottom:8px;color:var(--indigo);}
+.item-block{padding:12px 0;border-bottom:1px solid #eee;}
+.item-time{font-size:12px;color:#888;}
+.item-name{font-weight:600;margin:4px 0;}
+.quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
+.btn{display:block;text-align:center;padding:12px;border-radius:12px;text-decoration:none;font-weight:600;}
+.btn.secondary{background:var(--mint);color:var(--indigo);}
+
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;box-shadow:0 -2px 10px rgba(0,0,0,.05);z-index:100;}
+.nav-item{flex:1;text-align:center;padding:12px 0;color:#888;text-decoration:none;font-size:14px;}
+.nav-item.active{color:var(--indigo);font-weight:700;border-top:2px solid var(--indigo);}
