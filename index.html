@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>昆大丽香 · 旅行手册</title>
+  <link rel="stylesheet" href="global.css">
+</head>
+<body>
+  <div class="splash-screen" id="splash">
+    <div class="splash-content">
+      <h1 class="splash-title">昆大丽香</h1>
+      <p class="splash-subtitle">10天9晚 · 10.30–11.8</p>
+      <div class="countdown" id="countdown">
+        <span class="num" id="days">0</span>
+        <span class="unit">天后出发</span>
+      </div>
+      <button class="enter-btn" onclick="enterApp()">进入手册</button>
+    </div>
+  </div>
+
+  <div class="app-container" id="app" style="display:none;">
+    <header class="top-header">
+      <h2 id="page-title">今日行程</h2>
+    </header>
+    <main class="page-content" id="main-content">
+      <div id="today-view">
+        <div class="card" id="today-card">
+          <h3 id="today-date">加载中...</h3>
+          <p id="today-summary"></p>
+          <div id="today-items"></div>
+        </div>
+        <div class="quick-actions">
+          <a href="itinerary.html" class="btn secondary">完整行程</a>
+          <a href="favorites.html" class="btn secondary">我的收藏</a>
+        </div>
+      </div>
+    </main>
+    <nav class="bottom-nav">
+      <a href="index.html" class="nav-item active">今日</a>
+      <a href="itinerary.html" class="nav-item">行程</a>
+      <a href="favorites.html" class="nav-item">种草</a>
+      <a href="language.html" class="nav-item">语言</a>
+      <a href="guide.html" class="nav-item">锦囊</a>
+    </nav>
+  </div>
+
+  <script type="module">
+    import { loadAllData } from './js/supabase-client.js';
+    let allData = null;
+
+    function setCountdown() {
+      const start = new Date('2026-10-30');
+      const now = new Date();
+      const daysLeft = Math.ceil((start - now) / (1000*60*60*24));
+      document.getElementById('days').textContent = daysLeft > 0 ? daysLeft : 0;
+    }
+
+    window.enterApp = async function() {
+      document.getElementById('splash').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      allData = await loadAllData();
+      renderToday();
+    };
+
+    function renderToday() {
+      if (!allData) return;
+      document.getElementById('today-date').textContent = `${allData.info.trip_name} · Day ${allData.info.today_day}`;
+      const day = allData.days.find(d => d.day_no === allData.info.today_day);
+      if (!day) return;
+      document.getElementById('today-summary').textContent = day.theme || '';
+      const html = day.items.map(item => `
+        <div class="item-block">
+          <div class="item-time">${item.time_slot || ''}</div>
+          <div class="item-name">${item.name}</div>
+          <div class="item-desc">${item.description || ''}</div>
+        </div>
+      `).join('');
+      document.getElementById('today-items').innerHTML = html;
+    }
+
+    setCountdown();
+  </script>
+</body>
+</html>
